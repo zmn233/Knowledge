@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function findMin(arr) {
+      const dist = [],
+            isVisited = [],
+            INF = Number.MAX_SAFE_INTEGER,
+            len = arr.length
+      for(let i = 0; i < len; i++) {
+        dist[i] = INF
+        isVisited[i] = false
+      }
+      dist[0] = 0
+      // 每循环一次访问一个点，循环 len 次才能访问结束
+      for(let i = 0; i < len; i++) {
+        let minDis = INF,
+            minIndex = -1
+        for(let j = 0; j < len; j++) {
+          // 首先找到 dist 里最小的那个（说明此时他距离最小），以这个点为中介去更新别的点
+          if(isVisited[j] == false && dist[j] < minDis) {
+            minDis = dist[j]
+            minIndex = j
+          }
+        }
+        if(minIndex == -1) continue
+        isVisited[minIndex] = true
+        for(let j = 0; j < len; j++) {
+          // 找到 从这个中介点出发可以到达 并且 从中界点可以缩短距离的点，更新他们的 dist
+          if(isVisited[j] == false && arr[minIndex][j] != 0 && dist[j] > (dist[minIndex] + arr[minIndex][j])) {
+            dist[j] = dist[minIndex] + arr[minIndex][j]
+          }
+        }
+      }
+      return dist
+    }
+
+    console.log(findMin([
+      [0, 2, 4, 0, 0, 0],
+      [0, 0, 1, 4, 2, 0],
+      [0, 0, 0, 0, 3, 0],
+      [0, 0, 0, 0, 0, 2],
+      [0, 0, 0, 3, 0, 2],
+      [0, 0, 0, 0, 0, 0]
+    ]))
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html *{
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      box-sizing: border-box;
+      width: 100%;
+      margin: 0;
+      min-height: 100px;
+      border: 5px solid pink;
+    }
+    .left, .right {
+      width: 300px;
+      /* 不知道这里为什么必须是固定值，而不能是 100% */
+      /* 可能是因为当父元素设置了 min-height 而非 height 时，我子元素参照的是 height 值，which is 0，所以自然子元素也没有高度了 */
+      height: 100px;
+    }
+    .left {
+      background: darkmagenta;
+      float: left;
+    }
+    .right {
+      background: darksalmon;
+      float: right;
+    }
+    main {
+      height: 100%;
+      /* 这个地方也可以不设置 width 和 overflow，这种情况就是 main 是整个包含盒子的大小，左边延伸到包含盒子border-left，右边也一样，不过这样就看不见border了，因为会被两侧的aside背景颜色覆盖 */
+      width: calc(100% - 610px);
+      background: hotpink;
+      border-left: 5px solid pink;
+      border-right: 5px solid pink;
+      /* 将main放在另外一个BFC中，使其不会将自己的左边界触碰包含盒子的左边界 */
+      /* 刚开始可以不设置，这样当面试官延伸到“中间盒子高度变大”这种情况时，会出现main里的内容往左溢出，解决方法就是使用 overflow：hidden，为什么可以这么用呢，就可以回答你关于 BFC 的知识了 */
+      /* overflow: hidden; */
+    }
+  </style>
+</head>
+<body>
+  <!-- float 写法缺点在于需要清除浮动；优点在于兼容性比较好 -->
+  <!-- 采用百分比 + float 的方法 -->
+  <div class="container">
+    <aside class="left"></aside>
+    <aside class="right"></aside>
+    <!-- 为什么要把main写在后面呢？答案我还不是特别清楚ORZ -->
+    <main>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+      <p>浮动布局</p>
+    </main>
+  </div>
+</body>
+</html>

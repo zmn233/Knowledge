@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html *{
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      box-sizing: border-box;
+      width: 100%;
+      margin: 0;
+      border: 5px solid pink;
+      display: grid;
+      grid-template-areas: "leftside main rightside";
+      grid-template-columns: 300px 1fr 300px;
+      grid-template-rows: 100px;
+    }
+
+    .left {
+      background: darkmagenta;
+      grid-area: leftside;
+    }
+
+    .right {
+      background: darksalmon;
+      grid-area: rightside;
+    }
+    main {
+      background: hotpink;
+      border-left: 5px solid pink;
+      border-right: 5px solid pink;
+      grid-area: main;
+    }
+  </style>
+</head>
+<body>
+  <!-- 采用 grid 布局的方法 -->
+  <div class="container">
+    <aside class="left"></aside>
+    <main>
+      <p>网格布局</p>
+      <p>网格布局</p>
+      <p>网格布局</p>
+      <p>网格布局</p>
+      <p>网格布局</p>
+      <p>网格布局</p>
+      <p>网格布局</p>
+      <p>网格布局</p>
+      <p>网格布局</p>
+      <p>网格布局</p>
+    </main>
+    <aside class="right"></aside>
+  </div>
+</body>
+</html>

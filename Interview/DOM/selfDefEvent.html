@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .say {
+      width: 100px;
+      height: 100px;
+      background: palevioletred;
+    }
+  </style>
+</head>
+<body>
+  <div class="say"></div>
+  <script>
+    let sayEvent = new Event('saySomething'),
+        div = document.querySelector('.say')
+    div.addEventListener('saySomething', function() {
+      alert('i came from zmn')
+    }, false)
+
+    div.addEventListener('click', function() {
+      div.dispatchEvent(sayEvent)
+    }, false)
+
+  </script>
+</body>
+</html>

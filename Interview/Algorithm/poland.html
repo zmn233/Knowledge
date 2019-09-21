@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    let operator = {
+      '+': 0,
+      '-': 0,
+      '*': 1,
+      '/': 1
+    }
+
+    function change(inArr) {
+      let s = [],
+          q = []
+      inArr.forEach((item) => {
+        if(!(item in operator)) {
+          q.push(item)
+        } else {
+          while(s.length && (operator[s[s.length - 1]] >= operator[item])) {
+            q.push(s.pop())
+          }
+          if(s.length == 0 || operator[s[s.length - 1]] < operator[item]) {
+            s.push(item)
+          }
+        }
+      })
+      while(s.length) {
+        q.push(s.pop())
+      }
+      return q
+    }
+
+    function cal(postArr) {
+      let s = []
+      postArr.forEach((item) => {
+        if(!(item in operator)) {
+          s.push(item)
+        } else {
+          let oper = item,
+              num2 = s.pop(),
+              num1 = s.pop(),
+              res
+          if(oper == '+') res = (+num1) + (+num2)
+          else if(oper == '-') res = num1 - num2
+          else if(oper == '*') res = num1 * num2
+          else res = num1 / num2
+          s.push(res)
+        }
+      })
+      return s[0]
+    }
+
+    function calString(str) {
+      // 中缀
+      let inArr = str.split(' ')
+      // 将中缀表达式转换为后缀表达式
+      let postArr = change(inArr)
+      // 计算后缀表达式
+      return cal(postArr)
+    }
+
+    console.log(calString('5 + 2 * 3 / 49 - 4 / 13'))
+  </script>
+</body>
+</html>

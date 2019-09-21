@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <section class="clickMe">
+    <button class="btn1">btn1</button>
+    <button class="btn2">btn2</button>
+    <button class="btn3">btn3</button>
+    <button class="btn4">btn4</button>
+    <button class="btn5">btn5</button>
+    <button class="btn6">btn6</button>
+    <button class="btn7">btn7</button>
+    <button class="btn8">btn8</button>
+    <button class="btn9">btn9</button>
+    <button class="btn10">btn10</button>
+  </section>
+
+  <script>
+    let sec = document.querySelector('.clickMe')
+    let handler = function(event) {
+      let target = event.target,
+          mes;
+      switch (target.className) {
+        case 'btn1':
+          mes = 1
+          break
+        case 'btn2':
+          mes = 2
+          break
+        case 'btn3':
+          mes = 3
+          break 
+        case 'btn4':
+          mes = 4
+          break 
+        case 'btn5':
+          mes = 5
+          break
+        case 'btn6':
+          mes = 6
+          break
+        case 'btn7':
+          mes = 7
+          break
+        case 'btn8':
+          mes = 8
+          break
+        case 'btn9':
+          mes = 9
+          break
+        case 'btn10':
+          mes = 10
+          break
+      }
+      console.log(mes)
+    }
+    sec.addEventListener('click', handler, false);
+  </script>
+</body>
+</html>

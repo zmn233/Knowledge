@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html *{
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      box-sizing: border-box;
+      width: 100%;
+      margin: 0;
+      /* min-height: 100px; */
+      border: 5px solid pink;
+      display: flex;
+    }
+    aside {
+      flex: 0 1 300px;
+    }
+
+    .left {
+      background: darkmagenta;
+    }
+
+    .right {
+      background: darksalmon;
+    }
+
+    main {
+      background: hotpink;
+      border-left: 5px solid pink;
+      border-right: 5px solid pink;
+      flex: 1 1 auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- flex 布局现在已经被各大浏览器支持（IE8）不支持，并且写法也很简单 -->
+  <!-- 采用 flex 布局的写法 -->
+  <div class="container">
+    <aside class="left"></aside>
+    <main>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+      <p>flex 布局</p>
+    </main>
+    <aside class="right"></aside>
+  </div>
+</body>
+</html>

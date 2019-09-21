@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html * {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- 此时父盒子高度多少呢？ -->
+  <!-- 根据 css 中 computedStyle 显示，.parent 高度为 100px，可是 child 明明就有一个 margin-top 呀，这是怎么回事呢 -->
+  <section class="parent">
+    <style>
+      .parent {
+        /* 用了这个属性也不好使 */
+        /* box-sizing: border-box; */
+        background: darkorchid;
+        /* 当我们一添加这个属性，bang，背景颜色马上就显示出来了呢，这就是 BFC 的功劳了*/
+        /* overflow: hidden; */
+        /* border: 1px solid #ccc; */
+      }
+      .child {
+        height: 100px;
+        background: palevioletred;
+        margin-top: 10px;
+      }
+    </style>
+    <article class="child"></article>
+  </section>
+  <!-- margin collapse 一般会出现在：
+    父子元素之间
+    相邻的 兄弟元素之间
+    具有 margin 的 空元素之间
+  -->
+</body>
+</html>
