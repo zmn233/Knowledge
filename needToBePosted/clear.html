@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container {
+            background: #e23;
+            border: 1px solid #000;
+            /* 
+            第二种 给浮动元素的容器设置overflow: hidden
+            overflow: hidden;
+            该方法是利用了BFC的特性规则（计算BFC的高度时，浮动子元素也参与计算）
+             */
+            /* 
+            第三种 给浮动的元素容器设置浮动  不过不建议这样做
+            float: left; 
+            */
+        }
+        .left {
+            float: left;
+        }
+
+        .right {
+            float: right;
+        }
+
+        /* 
+            第一种 在元素后面添加一个新元素设置clear: both 
+            优点：简单，代码少，浏览器兼容性好。
+            缺点：需要添加大量无语义的html元素，代码不够优雅，后期不容易维护。
+            The clear CSS property specifies whether an element can be next to floating elements that precede it or must be moved down (cleared) below them.
+            .clear {
+                clear: both;
+            }
+            在container盒子里添加最后一个子元素，并为其设置 clear：both 可以解决container盒子没有高度的问题，我认为原因是这样的：这个元素由于设置了clear元素，因此不会去补充上面float元素留下的空隙，而是放在float元素的下面，而该元素的父元素container盒子因为要包含该子元素因此会扩展开，这样他就有高度了。
+            如果不在乎父盒子是否有高度，只是不想让container下面的那个元素跑到上面来（为了补充空隙），可以在container之间设置一个空元素并为其添加clear：both的样式，或是直接添加在 下面那个元素上
+        */
+        /* 
+        第四种  使用伪元素
+        这种方法最为常见
+        这个其实跟第一种的原理是相同的，但是是在浮动元素contaienr后面设置一个伪元素，这样避免增加html标记
+        .container::after {
+            display: block;   以块级盒子放置
+            content: "";   避免有多余内容
+            height: 0;    避免改变container高度
+            line-height: 0;  避免有字体高度
+            overflow: hidden;  
+            visibility: hidden;  使其不显示出来
+            clear: both;  清除浮动
+        }
+         */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">left</div>
+        <div class="right">right</div>
+        <!-- <div class="clear"></div> -->
+    </div>
+</body>
+</html>

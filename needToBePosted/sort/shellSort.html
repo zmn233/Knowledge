@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>希尔排序</title>
+</head>
+<body>
+  <script>
+      // 本质上跟插入排序差不多，只是刚开始比较的不是相邻的元素
+      function shellSort(arr) {
+        let gap;
+        for(gap = Math.floor(arr.length / 2); gap >= 1; gap = Math.floor(gap/2)) {
+          // arr[i] 为当前“插入”的元素，需要往前面找它合适的位置
+          for(let i = gap; i < arr.length; i++) {
+            let temp = arr[i];
+            let j;
+            for (j = i - gap; j >= 0 && temp < arr[j]; j -= gap) {
+              arr[j + gap] = arr[j];
+            }
+            arr[j + gap] = temp;
+          }
+        }
+        return arr;
+      } 
+
+      let arr = [34, 45, 32, 66, 1, 67, 45, 33, 67];
+      console.log(shellSort(arr));
+  </script>
+</body>
+</html>

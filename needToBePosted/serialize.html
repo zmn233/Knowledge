@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <form id="form" action="get">
+    <input type="text" name="username" value="请输入姓名">
+    <input type="text" name="password" value="请输入密码">
+    <input type="radio" name="sex">男
+    <input type="radio" name="sex">女
+    <input type="checkbox" name="hobby1">reading
+    <input type="checkbox" name="hobby2">watching
+    <input type="checkbox" name="hobby3">studying
+    <select name="living">
+      <option value="beijing">北京</option>
+      <option value="">上海</option>
+      <option value="shenzhen">深圳</option>
+      <option value="chengdu">成都</option>
+      <option>绵阳</option>
+    </select>
+    <input type="submit" value="提交">
+  </form>
+  <script>
+    function serialize(form) {
+      var parts = [],
+          field = null,
+          i,
+          len,
+          j,
+          optLen,
+          option,
+          optValue;
+      for(i = 0, len = form.elements.length; i < len; i++) {
+        field = form.elements[i];
+        switch(field.type) {
+          case "select-one":
+          case "select-multiple":
+            if(field.name.length) {
+              for(j = 0, optLen = field.options.length; j < optLen; j++) {
+                option = field.options[j];
+                if(option.selected) {
+                  optValue = "";
+                  if(option.hasAttribute) {
+                    optValue = (option.hasAttribute("value") ? option.value : option.text);
+                  } else {
+                    // 兼容 IE 的 specified 特性
+                    optValue = (option.attributes["value"].specified ? option.value : option.text);
+                  }
+                  parts.push(encodeURIComponent(field.name) + "=" + encodeURIComponent(optValue));
+                }
+              }
+            }
+            break;
+
+          case undefined:
+          case "file":
+          case "submit":
+          case "reset":
+          case "button":
+          break;
+
+          case "radio":
+          case "checkbox":
+            if(!field.checked) {
+              break;
+            }
+          // 执行默认操作
+          default:
+          if(field.name.length) {
+            parts.push(encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value));
+          }
+        }
+      }
+      return parts.join("&");
+    }
+
+    let form = document.getElementById('form');
+    form.addEventListener('submit', function(event) {
+      console.log(serialize(form));
+      event.preventDefault();
+    })
+  </script>
+</body>
+</html>

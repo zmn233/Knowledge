@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="box"></div>
+  <script>
+    const box = document.getElementById('box')
+    if(window.Worker) {
+      const w = new Worker('./webWorker_count.js')
+      w.postMessage(60)
+      w.onMessage = (e) => {
+        box.innerHTML = `还剩${e.data}秒`
+      }
+    }
+  </script>
+</body>
+</html>

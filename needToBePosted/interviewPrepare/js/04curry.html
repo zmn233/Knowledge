@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 当面试官问到什么是柯里化，有什么作用时，可以举一个简单的例子
+    // 柯里化是指这样一个函数(假设叫做createCurry)，他接收函数A作为参数，运行后能够返回一个新的函数。并且这个新的函数能够处理函数A的剩余参数。
+    // 举例
+    // 辅助函数
+    function createCurry(func, args = []) {
+
+      var arity = func.length;
+
+      return function() {
+          var _args = [].slice.call(arguments);
+          // 后传入的参数作为函数调用时首先使用的参数
+          // 不直接使用 _args.push(args) 是因为我们要push 的是args中的item，而不是整个 args
+          [].push.apply(_args, args);
+
+          // 如果参数个数小于最初的func.length，则递归调用，继续收集参数
+          if (_args.length < arity) {
+            // 这个地方之所以用call不用apply是因为apply后面根的是一个参数数组！
+              return createCurry.call(this, func, _args);
+          }
+
+          // 参数收集完毕，则执行func
+          return func.apply(this, _args);
+      }
+    }
+
+    // 简化版
+    function createCurry(fn) {
+      let len = fn.length,
+          args = [].slice.call(arguments, 1)
+      return function() {
+        let _args = [].concat.apply(args, arguments)
+        if(_args.length < len) {
+          // 一定要在 _args 前加上...,转换成参数列表
+          return createCurry.call(this, fn, ..._args)
+        }
+        return fn.apply(this, _args)
+      }
+    }
+
+    // 如果我们想要验证手机号，可能会封装这样的一个函数
+    function checkPhone(phoneNumber) {
+        return /^1[34578]\d{9}$/.test(phoneNumber);
+    }
+    // 想要验证邮箱，又封装这样的一个函数
+    function checkEmail(email) {
+        return /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(email);
+    }
+    // 如果还想要验证身份证号，密码等等，就需要封装更多的函数，这个时候我们可能会封装一个更通用的函数
+    function check(targetString, reg) {
+        return reg.test(targetString);
+    }
+    // 但是每一次使用时都需要传入一大串参数
+    check('14900000088',/^1[34578]\d{9}$/);
+    check('test@163.com', /^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/);
+    // 这个时候我们就可以利用函数柯里化将check封装起来
+    var _check = createCurry(check);
+
+    var checkPhone = _check(/^1[34578]\d{9}$/);
+    var checkEmail = _check(/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/);
+    // 使用时就很简便了
+    checkPhone('183888888');
+    checkEmail('xxxxx@test.com');
+
+
+    // 函数柯里化的应用：无限参数的柯里化
+    function add() {
+      // 第一次执行时，定义一个数组专门用来存储所有的参数
+      let _args = [].slice.call(arguments);
+        // 在内部声明一个函数，利用闭包的特性保存_args并收集所有的参数值
+            const _adder = function() {
+                // [].push.apply(_args, [].slice.call(arguments));
+                _args.push(...arguments);
+                return _adder;
+            };
+
+            // 利用隐式转换的特性，当最后执行时隐式转换，并计算最终的值返回
+            _adder.toString = function () {
+                return _args.reduce(function (a, b) {
+                    return a + b;
+                });
+            }
+      return _adder()
+    }
+    // 执行完 add 之后，a,b,c,d都为 _adder 函数，只是在参与运算或是利用 console.log() 打印时
+    // 会自动调用 toString()
+    // 利用 add 调用一大堆之后返回的就是_adder,当我们要打印一个函数或者参与运算时会自动调用 toString
+    var a = add(1)(2)(3)(4);   // f 10
+    var b = add(1, 2, 3, 4);   // f 10
+    var c = add(1, 2)(3, 4);   // f 10
+    var d = add(1, 2, 3)(4);   // f 10
+    console.log(a)
+    
+    // 可以利用隐式转换的特性参与计算
+    console.log(a + 10); // 20
+    console.log(b + 20); // 30
+    console.log(c + 30); // 40
+    console.log(d + 40); // 50
+
+    // 也可以继续传入参数，得到的结果再次利用隐式转换参与计算
+    console.log(a(10) + 100);  // 120
+    console.log(b(10) + 100);  // 120
+    console.log(c(10) + 100);  // 120
+    console.log(d(10) + 100);  // 120
+  </script>
+</body>
+</html>

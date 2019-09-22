@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    img {
+      display: block;
+      margin-bottom: 20px;
+      height: 200px;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+    <img data-src="./01.png">
+  </div>
+  <script>
+    const throttle = function(func, delay) {
+      let pre = Date.now()
+      return function() {
+        let now = Date.now(),
+            context = this,
+            args = arguments
+        if(now - pre >= delay) {
+          func.apply(context, args)
+          pre = Date.now()
+        }
+      }
+    }
+    // 获取整个视口的高度
+    const viewHeight = window.innerHeight || document.documentElement.clientHeight
+    // 获取所有的图片标签
+    const imgs = document.getElementsByTagName('img')
+    function lazyLoad() {
+      let imgLen = imgs.length,
+          i = 0
+      for(; i < imgLen; i++) {
+        // 计算视口高度减去图片距离页面顶部的高度
+        // top, left, right, bottom 都是相对于视口而定的，因此位于视口内的图片 top 值肯定小于整个视口的高度。等于说视口最上方是top=0这个位置，元素只要在它下面 top 就是正值，在它上面 top 就是负的
+        let distance = viewHeight - imgs[i].getBoundingClientRect().top
+        // 大于0表示属于可视区域范围
+        if(distance >= 0) {
+          imgs[i].src = imgs[i].getAttribute('data-src')
+        }
+      }
+    }
+    // 开始要调用一次，不然首屏啥也没有
+    lazyLoad()
+    window.addEventListener('scroll', throttle(lazyLoad, 1000))
+  </script>
+</body>
+</html>

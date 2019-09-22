@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      text-align: center;
+      display: grid;
+      grid-row-gap: 10px;
+      /* 写法一
+       这个地方 grid-template 还可以用 grid 代替
+       grid-template: "topBar topBar topBar topBar" 50px
+                     "main-header main-header main-header main-header" 100px
+                     "hero hero hero hero" 800px
+                     ". blog-posts side-bar . " 250px
+                     ". news side-bar . " 250px
+                     "main-footer main-footer main-footer main-footer" 100px
+                     / 200px 2fr 1fr 200px; */
+      /* 写法二 */
+      grid-template-areas: "topBar topBar topBar topBar"
+                          "main-header main-header main-header main-header"
+                          "hero hero hero hero"
+                          ". blog-posts side-bar . " 
+                          ". news side-bar . "
+                          "main-footer main-footer main-footer main-footer";
+      grid-template-rows: 50px 100px 800px 250px 250px 100px;
+      grid-template-columns: 200px 2fr 1fr 200px;                           
+      /* 还可以不采取字符串的形式，不过这样的话除非给每一个grid-line都命名，否则grid-item不可以使用名称的形式布局，只能用grid-number */
+      
+    }
+    .topBar {
+      grid-area: 1 / 1  / 2 / 5;;
+      background-color: orange;
+    }
+    .main-header {
+      grid-row: 2 / 3;
+      grid-column: 1 / span 4;
+      background-color: darkred;
+    }
+    .hero {
+      grid-area: hero;
+      background-color: pink;
+    }
+    .blog-posts {
+      grid-area: blog-posts;
+      background-color: green;
+    }
+    .news {
+      grid-area: news;
+      background-color: blue;
+    }
+    .side-bar {
+      grid-area: side-bar;
+      background-color: yellowgreen;
+    }
+    .main-footer {
+      grid-area: main-footer;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topBar">topBar</div>
+    <div class="main-header">mainHeader</div>
+    <div class="hero">hero</div>
+    <div class="blog-posts">blog-posts</div>
+    <div class="news">news</div>
+    <div class="side-bar">side-bar</div>
+    <div class="main-footer">main-footer</div>
+  </div>
+</body>
+</html>

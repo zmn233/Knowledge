@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .parent {
+      width: fit-content;
+      height: 400px;
+      background: palegreen;
+      padding: 10px;
+    }
+
+    .child {
+      height: 200px;
+      width: 200px;
+      margin: 20px 0;
+      background: aqua;
+    }
+
+    .transParent {
+      margin-top: 20px;
+      height: 400px;
+      width: 400px;
+      background: red;
+      position: relative;
+    }
+    .transChild {
+      height: 100px;
+      background: #000;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0)
+    }
+  </style>
+</head>
+<body>
+  <div class="parent">
+    <!-- 元素有浮动时，可以给父盒子设置 width:fit-content，兼容性不太好 -->
+    <div class="child" style="float: left"></div>
+  </div>
+  <!-- 利用transform 属性，其值为百分数时相对的是自身宽高，可以用于事先不知道盒子宽度的时候 -->
+  <div class="transParent">
+    <div class="transChild">iam a child</div>
+  </div>
+</body>
+</html>

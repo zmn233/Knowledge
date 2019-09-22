@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 扁平化数组，就是把数组拍平
+    let arr = [1, 2, [3, 4, [5, 6]],[]]
+    // 递归
+    function flatten(arr, result = []) {
+        for (let item of arr) {
+            if (Array.isArray(item))
+                flatten(item, result)
+            else
+                result.push(item)
+        }
+        return result
+    }
+
+    console.log(flatten(arr))
+
+    // 如果数组是一层嵌套，可以这么用
+    let arr2 = [1, 2, [3, 4]]
+    console.log(Array.prototype.concat.apply([], arr2))
+    /*记住  [1, 2].concat(3) // [1, 2, 3]
+            [1, 2].concat([3, 4]) // [1, 2, 3, 4]
+            [1, 2].push(3)  // [1, 2, 3]
+            [1, 2].push([3, 4])  //[1, 2, [3, 4]]
+    */
+
+    // 不管嵌套多么深也可以这么用
+    console.log(arr.toString().match(/\d+/g).map((item) => +item))
+    // 得是 \d+, 用于应对两位数
+    console.log(arr2.toString().match(/\d+/g).map((item) => +item))
+  </script>
+</body>
+</html>

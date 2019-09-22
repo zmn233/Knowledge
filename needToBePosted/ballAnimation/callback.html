@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>普通回调函数实现小球滚动动画</title>
+  <style>
+    .ball {
+      height: 40px;
+      width: 40px;
+      border-radius: 20px;
+    }
+
+    .ball1 {
+      background-color: red;
+    }
+
+    .ball2 {
+      background-color: brown;
+    }
+
+    .ball3 {
+      background-color: crimson;
+    }
+  </style>
+</head>
+<body>
+  <div class="ball ball1" style="margin-left: 0"></div>
+  <div class="ball ball2" style="margin-left: 0"></div>
+  <div class="ball ball3" style="margin-left: 0"></div>
+
+  <script>
+    let ball1 = document.getElementsByClassName('ball1')[0];
+    let ball2 = document.getElementsByClassName('ball2')[0];
+    let ball3 = document.getElementsByClassName('ball3')[0];
+
+    let animation = (ball, distance, cb) => {
+      setTimeout(function(){
+        let margin = parseInt(ball.style.marginLeft);
+        if(distance == margin) {
+          cb();
+        } else {
+          if(distance > margin) {
+            margin++;
+          } else {
+            margin--;
+          }
+          // 注：这两行不可以写在外面和if语句并列，否则哪怕满足条件也会一直递归下去
+          ball.style.marginLeft = margin + 'px';
+          animation(ball, distance, cb);
+        }
+      }, 13)
+    }
+
+    animation(ball1, 100, function(){
+      animation(ball2, 200, function() {
+        animation(ball3, 300, function() {
+          animation(ball3, 150, function() {
+            animation(ball2, 150, function() {
+              animation(ball1, 150, function() {
+
+              })
+            })
+          })
+        })
+      })
+    })
+  </script>
+</body>
+</html>

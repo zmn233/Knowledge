@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>  
+    // 这一部分是设计模式的总结，一共有20多种，我就写三种就是了
+    // 往简单了写，不然面试记不住orz
+    // 1. 工厂模式。在工厂方法模式中，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类。
+    const Sports = function(type) {
+      switch (type) {
+        case 'baskteball':
+          return new Basketball()
+        case 'football':
+          return new Football()
+      }
+    }
+
+    const Basketball = function() {
+      this.type = '篮球'
+    }
+
+    Basketball.prototype = {
+      constructor: Basketball,
+      score () {
+        console.log('三分！')
+      }
+    }
+
+    const Football = function() {
+      this.type = '足球'
+    }
+
+    Football.prototype = {
+      constructor: Football,
+      score () {
+        console.log('球进啦！')
+      }
+    }
+
+    let entertain = new Sports('football')
+    entertain.score()
+
+    // 2. 单体模式。是一个用来划分命名空间并将一批属性和方法组织在一起的对象，如果它可以被实例化，那么它只能被实例化一次。
+    const Singleton = function(name) {
+      this.name = name
+    }
+    Singleton.prototype.getName = function() {
+      return this.name
+    }
+
+    const getInstance = (function() {
+      let instance = null
+      return function(name) {
+        if(!instance) {
+          instance = new Singleton(name)
+        }
+        return instance
+      }
+    })()
+
+    const a = getInstance('aa')
+    const b = getInstance('aa')
+    const c = getInstance('cc')
+    console.log(a === b, a === c)  // true, true
+
+    // 3.发布---订阅模式又叫观察者模式，它定义了对象间的一种一对多的关系，让多个观察者对象同时监听某一个主题对象，当一个对象发生改变时，所有依赖于它的对象都将得到通知。
+    // 比如说一个 ajax 请求。我们首先发出ajax请求，请求成功后会触发 success 函数，这时就向外发布了 success 的信息，然后外面可以订阅 success，当被通知 success 后，可以做渲染页面，触发动画等等操作，例：
+    /*
+      $.ajax(“http://127.0.0.1/index.php”,function(data){
+          Obj.trigger(‘success’,data);  // 发布请求成功后的消息
+      });
+      // 下面我们来订阅此消息，比如我现在订阅渲染数据这个消息；
+      Obj.listen(“success”,function(data){
+        renderData(data);
+      });
+      // 订阅动画这个消息
+      Obj.listen(“success”,function(data){
+        doAnimate(data); 
+      });
+    */
+      const Event = (() => {
+        // list用来存放订阅不同消息的回调函数队列
+        let list = {},
+            listen,
+            trigger,
+            remove
+        listen = (key, fn) => {
+          if(!list[key]) {
+            list[key] = []
+          }
+          list[key].push(fn)
+        }
+        trigger = (key, ...data) => {
+          let fns = list[key]
+          if(!fns || fns.length === 0) {
+            return false
+          }
+          for(let i = 0; i < fns.length; i++) {
+            fns[i].call(this, data)
+          }
+        }
+        remove = (key, fn) => {
+          let fns = list[key]
+          if(!fns) return false
+          if(!fn) {
+            // 如果没有传入具体remove哪个回调函数，则表示remove掉所有回调函数
+            fns && (fns.length = 0)
+          } else {
+            for(let i = fns.length - 1; i >= 0; i--) {
+              if(fns[i] == fn) {
+                fns.splice(i, 1)
+                break
+              }
+            }
+          }
+        }
+        return {
+          listen,
+          trigger,
+          remove
+        }
+      })()
+
+      // 模拟一个发布订阅的实例，我监是否有动漫更新，动漫更新为 update 函数，一旦更新就触发 update 函数，并传入更新了哪几集，我收到通知触发回调函数打印出更新了哪几集
+      Event.listen('update', (...data) => {
+        console.log(`更新了第${data}集`)
+      })
+      Event.trigger('update', 4, 5, 6) // 更新了第4，5，6集
+      Event.remove('update')
+      Event.trigger('update', 4, 5, 6) // 没有打印，此时已经没有订阅者了 
+  </script>
+</body>
+</html>

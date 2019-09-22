@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .parent {
+      display: table;
+      width: 200px;
+    }
+    .child {
+      display: table-cell;
+      vertical-align: middle;
+    }
+    .flexParent {
+      display: flex;
+      width: 300px;
+      border: 1px solid #000;
+      padding: 20px;
+      align-items: center;
+    }
+    .transParent {
+      padding: 20px;
+      position: relative;
+      border: 1px solid #000;
+      width: 200px;
+    }
+
+    .transChild {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  </style>
+</head>
+<body>
+  <!-- 给父元素设置display：table， 子元素display：table-cell，并且 vertical-align:middle -->
+  <div class="parent">
+    白酒新熟山中归，黄鸡啄黍秋正肥。
+　　呼童烹鸡酌白酒，儿女嬉笑牵人衣。
+　　高歌取醉欲自慰，起舞落日争光辉。
+　　游说万乘苦不早，著鞭跨马涉远道。
+　　会稽愚妇轻买臣，余亦辞家西入秦。
+　　仰天大笑出门去，我辈岂是蓬蒿人。
+    <span class="child">李白</span>
+  </div>
+<!-- flex 布局 -->
+  <div class="flexParent">
+    <span class="flexChild">i want be in center</span>
+  </div>
+<!-- 利用transform值为百分数时相对的是自身这个特性 -->
+  <div class="transParent">
+    <span class="transChild">another one</span>
+  </div>
+</body>
+</html>

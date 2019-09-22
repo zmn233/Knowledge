@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .parent {
+      border: 1px solid #000;
+      width: 400px;
+      height: 400px;
+      text-align:center;
+      margin-top:20px;
+    }
+    div.child {
+      width:200px;
+      height: 200px;
+      background: orange;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="parent">
+    <!-- 如果是行内元素，则对其父元素设置 text-align 即可 -->
+    <span class="child">i want to be in center</span>
+    <!-- 如果是块级元素，对其设置 margin：0 auto 即可，需要声明宽度 -->
+    <div class="child">
+      iii9999
+    </div>
+  </div>
+
+</body>
+</html>

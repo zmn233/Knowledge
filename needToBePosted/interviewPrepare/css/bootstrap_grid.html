@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    /* 给container左右两侧设置值为 auto 的margin是为了居中显示。两个padding是为了留白 */
+    .container {
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+    /* 利用媒体查询给container设置宽度 */
+    @media (min-width: 768px) {
+      .container {
+        width: 750px
+      }
+    }
+    @media (min-width: 992px) {
+      .container {
+        width: 970px;
+      }
+    }
+    @media (min-width: 1200px) {
+      .container {
+        width: 1170px;
+      }
+    }
+    .container-fluid {
+      padding-right:15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+    /* 设置负的margin，这样row看上去就和container一样宽了 */
+    .row {
+      margin-right: -15px;
+      margin-left: -15px;
+    }
+    /* 然后就是对列的描述，bootstrap 将列分为12份 */
+    .col-xs-1 /*...*/{
+      /* 每个列都这样设置 */
+      position: relative;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+    /* 并且都设置了 float：left */
+    /* 然后通过百分比来控制不同占比的列在container中的大小 */
+
+    /* 自定义样式 */
+    .col-xs-3 {
+      background: palegreen;
+      height: 20px;
+    }
+    .col-xs-6 {
+      background: palevioletred;
+      height:20px;
+    }
+
+    .container {
+      overflow: hidden;
+    }
+    .row {
+      overflow: hidden;
+    }
+
+    /* 下面是小屏的实现 */
+.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12
+{
+  position: relative;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12 {
+  float: left;
+}
+.col-xs-12 {
+  width: 100%;
+}
+.col-xs-11 {
+  width: 91.66666667%;
+}
+.col-xs-10 {
+  width: 83.33333333%;
+}
+.col-xs-9 {
+  width: 75%;
+}
+.col-xs-8 {
+  width: 66.66666667%;
+}
+.col-xs-7 {
+  width: 58.33333333%;
+}
+.col-xs-6 {
+  width: 50%;
+}
+.col-xs-5 {
+  width: 41.66666667%;
+}
+.col-xs-4 {
+  width: 33.33333333%;
+}
+.col-xs-3 {
+  width: 25%;
+}
+.col-xs-2 {
+  width: 16.66666667%;
+}
+.col-xs-1 {
+  width: 8.33333333%;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6"></div>
+        <div class="col-xs-3"></div>
+    </div>
+    
+  </div>
+</body>
+</html>

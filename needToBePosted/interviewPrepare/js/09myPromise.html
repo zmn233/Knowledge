@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    /*
+    自己总结一下。Promise 定义三个常量 PENDING，FULFILLED，REJECTED来管理状态，两个数组来管理成功以及失败时的回调函数
+    通过 then 方法将注册的函数放到对应的队列中（当我们在 new Promise 时执行 resolve，它会对其中包装的 run 方法放到异步队列中，然后执行 then 方法，也就是说肯定是先注册回调函数，同步任务执行结束，会执行异步任务，根据 resolve 或 reject 的参数执行不同的逻辑，如果不是 promise，则直接 runFulfilled, 如果继承自 promise，则还要执行一个 then。。。blablabla)
+    */ 
+    const PENDING = 'PENDING'
+    const FULFILLED = 'FULFILLED'
+    const REJECTED = 'REJECTED'
+    const isFunction = variable => typeof variable === 'function'
+
+    class MyPromise {
+      constructor (handler) {
+        if(!isFunction(handler)) {
+          throw new Error('MyPromise must accept a function as a parameter')
+        }
+        // 添加状态
+        this._status = PENDING
+        // 添加数据
+        this._value = undefined
+        // 添加成功回调函数队列
+        this._fulfilledQueues = []
+        // 添加失败回调函数队列
+        this._rejectedQueues = []
+        try {
+          handler(this._resolve.bind(
+            this), this._reject.bind(this))
+        } catch (err) {
+          this._reject(err)
+        }
+      }
+      _resolve (val) {
+        const run = () => {
+          if (this._status !== PENDING) return
+          // 依次执行成功队列中的函数，并清空队列
+          const runFulfilled = (value) => {
+            let cb;
+            while (cb = this._fulfilledQueues.shift()) {
+              cb(value)
+            }
+          }
+          // 依次执行失败队列中的函数，并清空队列
+          const runRejected = (error) => {
+            let cb;
+            while (cb = this._rejectedQueues.shift()) {
+              cb(error)
+            }
+          }
+          /* 如果resolve的参数为Promise对象，则必须等待该Promise对象状态改变后,
+            当前Promsie的状态才会改变，且状态取决于参数Promsie对象的状态
+          */
+          if (val instanceof MyPromise) {
+            val.then(value => {
+              this._value = value
+              this._status = FULFILLED
+              runFulfilled(value)
+            }, err => {
+              this._value = err
+              this._status = REJECTED
+              runRejected(err)
+            })
+          } else {
+            this._value = val
+            this._status = FULFILLED
+            runFulfilled(val)
+          }
+        }
+          // 为了支持同步的Promise，这里采用异步调用
+          setTimeout(run, 0)
+        }
+        _reject (err) {
+          if (this.status != PENDING) return
+          //  依次执行失败队列中的函数，并清空队列
+          const run = () => {
+            this._status = REJECTED
+            this._value = err
+            let cb
+            while(cb = this._rejectedQueues.shift()) {
+              cb(err)
+            }
+          }
+        setTimeout(run, 0)
+      }
+      then (onFulfilled, onRejected) {
+        const {_value, _status} = this
+        return new MyPromise((onFulfilledNext, onRejectedNext) => {
+          // 封装一个成功时执行的函数
+          let fulfilled = value => {
+            try {
+              if (!isFunction(onFulfilled)) {
+                // 如果then方法第一个参数不是函数，则执行 promise 的resolve 函数，并将value传入
+                onFulfilledNext(value)
+              } else {
+                let res = onFulfilled(value)
+                if(res instanceof MyPromise) {
+                  res.then(onFulfilledNext, onRejectedNext)
+                } else {
+                  onFulfilledNext(res)
+                }
+              }
+            } catch {
+              onRejectedNext(err)
+            }
+          }
+          // 封装一个失败时执行的函数
+          let rejected = error => {
+            try {
+              if (!isFunction(onRejected)) {
+                onRejectedNext(error)
+              } else {
+                  let res = onRejected(error);
+                  if (res instanceof MyPromise) {
+                    // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
+                    res.then(onFulfilledNext, onRejectedNext)
+                  } else {
+                    //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
+                    onFulfilledNext(res)
+                  }
+              }
+            } catch (err) {
+              // 如果函数执行出错，新的Promise对象的状态为失败
+              onRejectedNext(err)
+            }
+          }
+          switch (_status) {
+            // 当状态为pending时，将then方法回调函数加入执行队列等待执行
+            case PENDING:
+              this._fulfilledQueues.push(fulfilled)
+              this._rejectedQueues.push(rejected)
+              break
+            // 当状态已经改变时，立即执行对应的回调函数
+            case FULFILLED:
+              fulfilled(_value)
+              break
+            case REJECTED:
+              rejected(_value)
+              break
+          }
+        })
+      }
+      catch (onRejected) {
+        return this.then(undefined, onRejected)
+      }
+    }
+
+    const promise1 = new MyPromise((resolve, reject) => {
+      let i = 0
+      while(i < 1000) i++
+      resolve(i)
+    })
+    const promise2 = promise1.then((res) => {
+      console.log(res)
+    })
+
+    /*
+      Promise 是一个构造函数，通过三个常量 pending, fullfilled, rejected 来管理状态，当我们 new Promise 时，promise 实例状态为 pending，并且具有两个数组，分别用于存放我们通过 then 注册的 promise 执行成功或者失败时的回调函数
+      我们在执行 resolve 的时候，其实就是拿到 fullfilled 队列当中的回调函数一一执行，但这个过程是异步的，如果自己实现的话可以通过 setTimeout(run, 0) 记性。也就是说我们每次在调用 resolve 之后，首先会遍历队列然后将回调函数放到异步任务中，然后就去执行 then 方法，then 方法就是对回调函数进行一个注册，并且会同样返回一个 promise。它会去判断当前 promise 的状态是否为 pending，如果是的话就将回调函数放入对应的队列中，如果不是就立即执行。也就是说，promise 在执行完 resolve 之后再通过 then 注册的回调都会立即执行。
+    */ 
+  </script>
+</body>
+</html>

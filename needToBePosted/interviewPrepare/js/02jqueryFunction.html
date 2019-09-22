@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // jquery 中几种方法的底层实现
+    // 1. bind
+    let bind = function( types, data, fn ) {
+        return this.on( types, null, data, fn )
+    }
+
+    let on =  function(types, selector, data, fn, /*INTERNAL*/ one) {
+      //省略部分代码
+      return this.each(function() {
+        // 而这个 add 方法内部实际通过 addEventListener 绑定事件
+        jQuery.event.add(this, types, fn, data, selector);
+      });
+    }
+    // 也就是说，bind 内部是通过 on 实现的，而 on 方法内部又调用 add 方法，add 方法实际又是通过 addEventListener 实现
+
+    // js原生bind
+    Function.prototype.myBind = function(context) {
+      // 1.bind 方法利用的是闭包，在我们调用 bind 函数时，会将第一个参数，也就是我们要绑定到的对象指针保存下来
+      // 同样的也要将传入的初始参数转换为数组保存下来 
+      let self = this,
+          _args = Array.prototype.slice.call(arguments, 1),
+          FNOP = function() {},
+          // 2. 然后定义一个bound函数并将其返回，这个函数就是我们第二次调用时用到的函数
+          bound = function() {
+            // 3. 我们在调用绑定后的函数时传入的参数会添加到初始参数的后面，传到原始函数中
+            const args = Array.prototype.concat.apply(_args, arguments)
+            // 6. 在执行时首先判断是否为 new 调用，如果是则this为bound构造函数的this，否则为第一次绑定时传入的this
+            return self.apply(this instanceof self ? this : context || window, args)
+          }
+      // 4.bind 绑定的方法同样可以用 new 调用，因此我们我们需要借助一个辅助空函数，这个函数继承至原始函数的prototype
+      FNOP.prototype = this.prototype
+      // 5.然后将我们定义的 bound 函数的 prototype 属性指向这个辅助函数的实例，这时我们通过 new bound 函数创建出的实例具有
+      // new bound() __proto__ === new FNOP
+      // new FNOP __proto__ === 原始函数的 prototype    
+      bound.prototype = new FNOP()
+      return bound
+    }
+
+    // 简洁写法
+    Function.prototype.myBind = function(context, ...args) {
+      let _this = this
+      const FNOP = function() {}
+      FNOP.prototype = _this.prototype
+      const bound = function() {
+        let _args = [].concat.apply(args, arguments)
+        return _this.apply(this instanceof FNOP ? this : context, _args)
+      }
+      bound.prototype = new FNOP()
+      return bound
+    }
+    // 检测
+    // function test() {
+    //   console.log(this.name)
+    // }
+    // const obj = {name:'zmn'}
+    // const bound = test.myBind(obj)
+    // bound()
+
+    // function FN() {
+    //   this.name = 'zmn'
+    //   this.job = 'bytedance'
+    // }
+    // const bound = FN.myBind()
+    // console.log(new bound())
+
+
+
+    // 2. extend
+    // $.extend 表示将多个对象合并到目标对象上，如果没有 target 传入，则会将配置合并到 jquery 对象上
+jQuery.extend = jQuery.fn.extend = function() {  
+    var options, name, src, copy, copyIsArray, clone,  
+        target = arguments[0] || {}, // 目标对象  
+        i = 1,  
+        length = arguments.length,  
+        deep = false;  
+    // 处理深度拷贝情况（第一个参数是boolean类型且为true）  
+    if ( typeof target === "boolean" ) {  
+        deep = target;  
+        target = arguments[1] || {};  
+        // 跳过第一个参数（是否深度拷贝）和第二个参数（目标对象）  
+        i = 2;  
+    }  
+    // 如果目标不是对象或函数，则初始化为空对象  
+    if ( typeof target !== "object" && !jQuery.isFunction(target) ) {  
+        target = {};  
+    }  
+    // 如果只指定了一个参数，则使用jQuery自身作为目标对象  
+    if ( length === i ) {  
+        target = this;  
+        --i;  
+    }  
+    for ( ; i < length; i++ ) {  
+        // Only deal with non-null/undefined values  
+        if ( (options = arguments[ i ]) != null ) {  
+            // Extend the base object  
+            for ( name in options ) {  
+                src = target[ name ];  
+                copy = options[ name ];  
+                // Prevent never-ending loop  
+                if ( target === copy ) {  
+                    continue;  
+                }  
+                // 如果对象中包含了数组或者其他对象，则使用递归进行拷贝  
+                if ( deep && copy && ( jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)) ) ) {  
+                    // 处理数组  
+                    if ( copyIsArray ) {  
+                        copyIsArray = false;  
+                        // 如果目标对象不存在该数组，则创建一个空数组；  
+                        clone = src && jQuery.isArray(src) ? src : [];  
+                    } else {  
+                        clone = src && jQuery.isPlainObject(src) ? src : {};  
+                    }  
+                    // 从不改变原始对象，只做拷贝  
+                    target[ name ] = jQuery.extend( deep, clone, copy );  
+                // 不拷贝undefined值  
+                } else if ( copy !== undefined ) {  
+                    target[ name ] = copy;  
+                }  
+            }  
+        }  
+    }  
+    // 返回已经被修改的对象  
+    return target;  
+};
+    // 3. $
+    // jquery 通过一个立即执行函数将变量都保存在函数作用域中，然后将 jQuery 和 $ 暴露给 window
+    window.jQuery = window.$ = (selector, context) => {
+      return new jQuery.fn.init(selector, context)
+    }
+    jQuery.fn.init.prototype = jQuery.fn
+    // 也就是说当我们用 $ 去包装一个对象是，其返回的是一个 jQuery.fn.init 实例对象，而这个构造函数的prototype 指向 jQuery.fn，因此我们的实例对象也可以访问到原型对象中的方法。$ 选择器的实现首先会通过正则表达式将传入的字符串进行一个分割，然后确定表达式的类型，遍历得到结果。(主要利用 querySelectorAll 方法)
+  </script>
+</body>
+</html>

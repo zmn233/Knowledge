@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>选择排序</title>
+</head>
+<body>
+  <script>
+    // 以第i个为基准，从i+1开始往后找有没有比它更小的数，从这些更小的数中找到最小的，然后与其交换
+    let selectionSort = arr => {
+      let len = arr.length;
+      //  因为arr[i] 要和 arr[j]比，而j比i大，所以要保证 i < len - 1
+      for(let i = 0; i < len - 1; i++) {
+        // 写在这里是为了更新每次查找时进行比较的值，如果写在外面，minIndex每次都等于上一次找到的最小的值，后面的值又怎么会比它更小呢
+        let minIndex = i
+        //  找到未排序数组中最小的数值的索引
+        for(let j = i + 1; j < len; j++) {
+          if(arr[j] < arr[minIndex]) {
+            minIndex = j;
+          }
+        }
+        [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+      }
+      return arr;
+    }
+    let arr = [34, 45, 32, 66, 1, 67, 45, 33, 67];
+    console.log(selectionSort(arr));
+  </script>
+</body>
+</html>

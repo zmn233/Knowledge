@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // let makePromise = (value) => {
+    //     console.log("sync", value)
+    //     return new Promise(resolve => {
+    //         setTimeout(() => {
+    //             console.log("async", value)
+    //             resolve(value)
+    //         }, Math.random() * 1000)
+    //     })
+    // }
+    // let print = (value) => {
+    //     console.log("print", value)
+    //     return value
+    // }
+    // let values = [1, 2, 3, 4]
+    // let promises = values.map(value => makePromise(value)) // 这里就已经开始并行加载
+    // let parallelPromises = promises.reduce(
+    //     (current, next) => current.then(() => next.then(print)),
+    //     Promise.resolve()
+    // )
+    // parallelPromises
+    //     .then(() => console.log("done"))
+    //     .catch(() => console.log("failed"))
+
+    function makePromise(value) {
+      console.log(`sync ${value}`)
+      return new Promise(resolve => {
+        setTimeout(() => {
+          console.log(`async ${value}`)
+          resolve(value)
+        }, Math.random() * 1000)
+      })
+    }
+
+    function print(value) {
+      console.log(`print ${value}`)
+    }
+
+    const arr = [1, 2, 3, 4]
+    const promises = arr.map(value => makePromise(value))
+    promises.reduce(
+        (current, next) => current.then(() => next.then(print)),
+      Promise.resolve())
+  </script>
+</body>
+</html>

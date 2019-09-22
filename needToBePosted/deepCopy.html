@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+    const getRegExp = re => {
+      let flags = ''
+      if(re.global) flags += 'g'
+      if(re.ignoreCase) flags += 'i'
+      if(re.multiline) flags += 'm'
+      return flags
+    }
+
+    const deepCopy = function(obj) {
+      if(typeof obj !== 'object') return obj
+      let item
+      if(Object.prototype.toString.call(obj) === '[object RegExp]') {
+        item = new RegExp(obj.source, getRegExp(obj))
+        return item
+      } else if(Object.prototype.toString.call(obj) === '[object Date]') {
+        item = new Date(obj.getTime())
+        return item
+      } 
+      item = Object.prototype.toString.call(obj) === '[object Object]' ? {} : []
+      for(let key in obj) {
+        if(obj.hasOwnProperty(key)) {
+          item[key] = deepCopy(obj[key])
+        }
+      }
+      return item
+    }
+
+    const obj1 = {
+      name: 'zmn',
+      age: 20,
+      wish: ['offer from zijie', 'offer from tencent', 'offer from bank'],
+      read: {
+        '红楼梦': '曹雪芹',
+        '穷查理宝典': '穷查理'
+      },
+      time: new Date(),
+      reg: /\s+/ig
+    }
+
+    const obj2 = deepCopy(obj1)
+
+    
+  </script>
+</body>
+</html>

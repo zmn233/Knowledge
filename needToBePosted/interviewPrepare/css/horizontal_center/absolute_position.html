@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .parent {
+      position: relative;
+      height: 400px;
+      width: 400px;
+      background: purple;
+    }
+
+    .child {
+      position: absolute;
+      height: 200px;
+      width: 200px;
+      left: 50%;
+      margin-left: -100px;
+      background: yellowgreen;
+    }
+    .child2 {
+      height: 50px;
+      width: 50px;
+      position: absolute;
+      background: salmon;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- 这两种都必须固定宽度 -->
+  <div class="parent">  
+    <div class="child"></div>
+    <div class="child2"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    @keyframes spin {
+      0% {
+        transform: rotateY(0deg)
+      }
+      100% {
+        transform: rotateY(360deg)
+      }
+    }
+    .container {
+      width: 200px;
+      height:200px;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -100px;
+      margin-left: -100px;
+      transform-style: preserve-3d;
+      animation: spin 4s ease-in-out infinite ;
+    }
+    div {
+      background: palegreen;
+      position: absolute;
+      height: 200px;
+      width: 200px;
+      border-radius: 50%;
+    }
+    .front {
+      background: paleturquoise;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="coin front"></div>
+    <div class="coin" style="transform: translateZ(1px);background: palevioletred "></div>
+    <div class="coin" style="transform: translateZ(2px);background:plum"></div>
+    <div class="coin" style="transform: translateZ(3px); background: deeppink;"></div>
+    <div class="coin" style="transform: translateZ(4px); background:olive;"></div>
+    <div class="coin" style="transform: translateZ(5px);background: purple;"></div>
+    <div class="coin" style="transform: translateZ(6px);background: olivedrab;"></div>
+    <div class="coin" style="transform: translateZ(7px);background: lawngreen;"></div>
+    <div class="coin" style="transform: translateZ(8px);background:lightcoral;"></div>
+    <div class="coin back" style="transform: translateZ(9px)"></div>
+  </div>
+</body>
+</html>

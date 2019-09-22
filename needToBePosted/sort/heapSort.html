@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>堆排序</title>
+</head>
+<body>
+  <script>
+
+      // 堆排序：利用数组建堆，从最后一个有子元素的节点开始，将值最大的元素放到堆顶，然后与数组最后一位元素进行交换
+      // 再在剩余的节点中找到值最大的元素，继续放到堆顶然后与倒数第二位元素进行交换，如此往复
+      function heapSort(arr) {
+        let i = Math.floor(arr.length / 2) - 1
+            len = arr.length;
+        for(i; i >= 0; i--) {
+          heapify(arr, i, len);
+        }
+        for(let j = len - 1; j >= 1; j--) {
+          [arr[j], arr[0]] = [arr[0], arr[j]];
+          heapify(arr, 0, j);
+        }
+        return arr;
+      }
+
+      function heapify(arr, large, len) {
+        let x = large,
+            l = 2 * large + 1,
+            r  =2 * large + 2; // 因为索引是从0开始的
+        if(l < len && arr[large] < arr[l]) {
+          large = l;
+        }
+        if(r < len && arr[large] < arr[r]) {
+          large = r;
+        }
+        if(large != x) {
+          [arr[x], arr[large]] = [arr[large], arr[x]];
+          heapify(arr, large, len);
+        }
+
+      }
+      // var arr = [91, 60, 96, 13, 35, 65, 46, 65, 10, 30, 20, 31, 77, 81, 22];
+      var arr = [1, 3, 4, 2, 5]
+      console.log(heapSort(arr));
+  </script>
+</body>
+</html>

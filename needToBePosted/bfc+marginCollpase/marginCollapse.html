@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    p {
+      margin: 10px 0;
+      background-color: lightgreen;
+    }
+
+    .container {
+      background-color: red;
+      overflow: hidden;
+      /* creates block formatting context */
+    }
+    /* general styling */
+
+    body {
+      text-align: center;
+      width: 500px;
+      margin: 20px auto;
+    }
+    
+    /* .p {
+      background: none;
+      padding-top: 150px;
+      font-size: 13px;
+    } */
+    /* general styling ends */
+    .overflow {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Sibling 1</p>
+    <div class="overflow">
+      <p>Sibling 2</p>
+    </div>
+  </div>
+</body>
+</html>

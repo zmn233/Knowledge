@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .container1 {
+      width: 400px;
+      height: 400px;
+      background-color: blanchedalmond;
+      border: 1px solid #666;
+    }
+
+    .p1 {
+      margin: 0 0 25px 0;
+      background-color:coral;
+    }
+
+    .p2 {
+      margin: 40px 0 0 0;
+      background:crimson;
+    }
+
+    .container2 {
+      padding: 0;
+      border: none;
+      margin-top: 50px;
+      background:darkslategrey;
+    }
+    .p3 {
+      margin-top: 20px;
+      background-color:deeppink;
+      margin-bottom: 0;
+    }
+
+    .container3 {
+      background:dimgrey;
+      margin: 49px 0 0 0;
+      padding: 1px 0 0 0;
+    }
+
+    .p4 {
+      margin:20px 0 0 0;
+      background:goldenrod;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="container1">
+    <p class="p1">我是p1</p>
+    <p class="p2">我是p1的妹妹p2</p>
+  </div>
+  <span>相邻元素之间发生margin collapse，大的获胜，此时两个p之间margin为40px</span>
+
+  <div class="container2">
+    <p class="p3">我是p1和p2的表姐p3</p>
+  </div>
+  <span>满足一定条件，父子元素之间同样也会发生margin collapse</span>
+  
+  <div class="container3">
+    <p class="p4">我是p1和p2和p3的表哥p4</p>
+    
+  </div><span>要解决父子间的这种现象，可以在<span style="font-weight: bold">父元素</span>上加一个border或是padding</span>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>快速排序</title>
+</head>
+<body>.parent2 {
+      border: 1px solid #000;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .child2 {
+      border: 1px solid #000;
+      font-size: 20px;
+    }
+  <script>
+      // 快排就是在数组中间选择一个基准，小于这个基准的放到数组左边，大于的则放在右边
+      function quickSort(arr) {
+        if(arr.length <= 1) {
+          return arr;
+        }
+        let pivotIndex = Math.floor(arr.length / 2),
+            pivot = arr.splice(pivotIndex, 1)[0],
+            left = [],
+            right = [];
+        for(let i = 0; i < arr.length; i++) {
+          if(arr[i] > pivot) {
+            right.push(arr[i]);
+          }else {
+            left.push(arr[i]);
+          }
+        }
+        return quickSort(left).concat([pivot], quickSort(right));
+      } 
+
+      let arr = [34, 45, 32, 66, 1, 67, 45, 33, 67];
+      console.log(quickSort(arr));  
+  </script>
+</body>
+</html>

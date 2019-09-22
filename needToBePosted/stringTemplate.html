@@ -1,0 +1,27 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 最简单的模板字符串功能，既没考虑data深层次嵌套，也没考虑模板字符串中有js语法的情况
+      let str = 'my name is {name}, i want an offer from {company}',
+          data = {
+            name: 'zmn',
+            company: 'toutiao'
+          }
+      function templateTransfer(str, data) {
+        // replace 函数第二个参数可为函数，函数第一个参数为匹配到的字符串，第二个往后为捕获到的字符串，倒数第二个为字符串的偏移量，最后一个为匹配的原字符串
+        return str.replace(/\{(\w+)\}/g, (match, key)=>{
+          return data[key]
+        })
+      }
+
+      console.log(templateTransfer(str, data))
+    </script>
+  </body>
+  </html>

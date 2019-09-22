@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // cookie 封装，来自 JS 高程
+    const CookieUtil = {
+        // 设置cookie
+        set (name, value, expires, domain, path, secure) {
+            let cookieText = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`
+            if (expires instanceof Date) {
+                cookieText += `; expires=${expires.toUTCString()}`
+            }
+            // 之所以要在这一条里设置上一条的分号，是因为只有后面还有参数的时候才会跟分号
+            if (path) {
+                cookieText += `; path=${path}`
+            }
+            if (domain) {
+              // Domain 和 Path 标识定义了Cookie的作用域：即Cookie应该发送给哪些URL。
+              // Domain 标识指定了哪些主机可以接受Cookie。如果不指定，默认为当前文档的主机（不包含子域名）。Path 标识指定了主机下的哪些路径可以接受Cookie（该URL路径必须存在于请求URL中）。
+                cookieText += `; domain=${domain}`
+            }
+            if (secure) {
+              // 标记为 Secure 的Cookie只应通过被HTTPS协议加密过的请求发送给服务端。
+              // 带有 HttpOnly 标记的Cookie，它们只应该发送给服务端。如果包含服务端 Session 信息的 Cookie 不想被客户端 JavaScript 脚本调用，那么就应该为其设置 HttpOnly 标记。
+                cookieText += `; ${secure}`
+            }
+            document.cookie = cookieText
+        },
+        // name=value; expires=expiration_time; path=domain_path; domain=domain_name; secure
+        // 获取cookie
+        get (name) {
+            const cookieName = `${encodeURIComponent(name)}=`
+            let cookieStart = document.cookie.indexOf(cookieName),
+                cookieValue = ""
+            if (cookieStart > -1) {
+                let cookieEnd = document.cookie.indexOf (";", cookieStart)
+                if (cookieEnd == -1) {
+                    cookieEnd = document.cookie.length
+                }
+                const cookieValue = decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length, cookieEnd))
+            }
+            return cookieValue 
+        },
+        // 删除cookie
+        unset (name, domain, path, secure) {
+            this.set(name, "", Date(0), domain, path, secure)
+        }
+    }
+    // 设置 cookie
+    // 不可以在 chrome 里设置document.cookie 所以看不到任何效果
+    // 在 firefox 下可以
+    // 跑在服务器上的话（应该）可以
+    CookieUtil.set('name', 'mn')
+    // CookieUtil.set('book', 'Professional javascript')
+
+    // 读取 cookie
+    console.log(CookieUtil.get('name'))
+    // console.log(CookieUtil.get('book'))
+
+    // 删除 cookie
+    // CookieUtil.unset('name')
+    // CookieUtil.unset('book')
+  </script>
+</body>
+</html>

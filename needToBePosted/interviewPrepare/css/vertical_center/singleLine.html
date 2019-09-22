@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .single {
+      height: 30px;
+      width: 200px;
+      border: 1px solid #000;
+      line-height: 30px;
+    }
+
+    .inBlockParent {
+      margin-top:20px;
+      height: 30px;
+      width: 200px;
+      border: 1px solid #000;
+      vertical-align: middle;
+    } 
+    .inBlockChild {
+      display: inline-block;
+    } 
+    .inBlockParent::after {
+      display: inline-block;
+      vertical-align: middle;
+      content: '';
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!-- 简单的单行文本设置行高与line-height相等即可 -->
+  <div class="single">i am just a single line</div>
+      display: inline-block;
+  <!-- 给父盒子添加::after伪元素，将其与子元素（待垂直居中的那个）同时设为 inline-block 并且vertical-align为middle -->
+  <div class="inBlockParent">
+    <span class="inBlockChild">i am another single line</span>
+  </div>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .container {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 20px;
+      background: olive;
+    }
+    .child {
+      width: 100px;
+      height: 100px;
+      background: olivedrab;
+    }
+
+    .parent1 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .parent2 {
+      position: relative;
+    }
+    .parent2 .child {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -50px;
+      margin-left: -50px;
+    }
+
+    .parent3 {
+      position: relative;
+    }
+    .parent3 .child {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    .parent4 .child {
+      /* 没法垂直居中 */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .parent5 {
+      display: grid;
+      justify-content: center;
+      align-content: center;
+    }
+
+    .parent6 {
+      text-align: center;
+
+    }
+    .parent6 span {
+      line-height: 200px;
+    }
+
+    .parent7 {
+      position: absolute;
+    }
+    .parent7 .child {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      top: 0;
+      bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- 
+    统计一下一共有六种方法实现垂直居中，七种方法实现水平居中
+    前六种都是通用的
+    1. flex 布局：justify-content 设置水平居中 align-items 设置垂直居中。设置在父元素上
+    2. grid 布局：justify-content 设置水平布局 align-content 设置垂直居中。设置在父元素上
+    3-5. absolute 布局：top，left 50% 后，通过 margin 或者 transform 往回扯达到居中。不同的是 transform 可以在不知道自身大小的情况下使用，flex 也可以。或者是利用 margin: auto;left: 0;right:0;top:0;bottom:0; 来设置，会自动去分配它的 margin 满足条件。也就是说 absolute 可以实现三种方法。
+    6. 针对元素为文字的情况(行内元素),在父元素上设置 text-align：center，子元素上设置 line-height：父盒子高度。
+    7. margin： 0 auto；这种只能实现水平居中，而不是垂直居中。
+
+   -->
+  <div class="container parent1">
+    <div class="child"></div>
+  </div>
+  <div class="container parent2">
+    <div class="child"></div>
+  </div>
+  <div class="container parent3">
+    <div class="child"></div>
+  </div>
+  <div class="container parent4">
+    <div class="child"></div>
+  </div>
+  <div class="container parent5">
+    <div class="child"></div>
+  </div>
+  <div class="container parent6">
+    <span>am i centered?</span>
+  </div>
+  <div class="container parent7">
+    <div class="child"></div>
+  </div>
+</body>
+</html>

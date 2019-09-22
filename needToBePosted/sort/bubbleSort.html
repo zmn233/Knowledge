@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>冒泡排序</title>
+</head>
+<body>
+  <script>
+    // 最简单的冒泡排序
+    let bubbleSort1 = arr => {
+      let len = arr.length;
+      // 一共要比较 n-1趟
+      for(let i = 0; i < len; i++) {
+        for(let j = 0; j < len - i - 1; j++) {
+          if(arr[j] > arr[j + 1]) {
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+          }
+        }
+      }
+      return arr;
+    }
+
+    // 改良版本一：用一个pos记录上次交换最后位置，下次交换截止到pos就可以了
+    let bubbleSort2 = arr => {
+      let len = arr.length;
+      let i = len - 1, pos;
+      while(i > 0) {
+        pos = 0;  // 如果从0到上次交换的位置也都已经排好序，说明此时数组已经有序，这时i=pos=0，退出循环
+        for(let j = 0; j < i; j++) {
+          if(arr[j] > arr[j + 1]) {
+            pos = j;
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+          }
+        }
+        i = pos;
+      }
+      return arr;
+    }
+
+    // 改良版本二：从两边向中间排序，每一次冒泡找到最大的和最小的，放在无序数组的两边
+    let bubbleSort3 = arr => {
+      let low = 0, high = arr.length - 1;
+      while(low < high) {
+        // 查找最大数
+        for(let i = low; i < high ; i++) {
+          if(arr[i] > arr[i + 1]) {
+            [arr[i], arr[i+1]] = [arr[i+1], arr[i]];
+          }
+        }
+        high--;
+        // 查找最小数
+        for(let j = high; j > low; j--) {
+          if(arr[j] < arr[j - 1]) {
+            [arr[j], arr[j-1]] = [arr[j-1], arr[j]];
+          }
+        }
+        low++;
+      }
+      return arr;
+    }
+    let arr = [34,45,32,66,1,67,45,33,67];
+    console.log(bubbleSort3(arr));
+  </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 前端性能优化之防抖和节流
+    /*
+      针对一些会频繁触发的事件如scroll、resize，如果正常绑定事件处理函数的话，有可能在很短的时间内多次连续触发事件，十分影响性能
+      节流：使得一定时间内只触发一次函数。 
+      它和防抖动最大的区别就是，节流函数不管事件触发有多频繁，都会保证在规定时间内一定会执行一次真正的事件处理函数，而防抖动只是在最后一次事件后才触发一次函数。 
+    */
+    let handler = () => {console.log('我被触发了')}
+    // 时间戳实现，监听函数应该会立即执行（只要绑定时间与触发事件大于delay）
+    var throttle = function(func,delay){
+      var prev = Date.now();
+      return function(){
+        var now = Date.now();
+        if(now - prev >= delay){
+          func()
+          prev = Date.now();
+        }
+      }
+    }
+    window.addEventListener('resize', throttle(handler, 2000))
+    // 定时器实现，当第一次触发事件时，肯定不会立即执行函数，而是在delay秒后才执行。 当最后一次停止触发后，由于定时器的delay延迟，还会执行一次函数。
+    var throttle2 = function(func,delay){
+    var timer = null
+        return function(){
+            if(!timer){
+                timer = setTimeout(function(){
+                    func()
+                    timer = null;
+                },delay);
+            }
+        }
+    }
+    // window.addEventListener('resize', throttle2(handler, 1000))
+
+    // 综合使用，完成一个事件触发立即执行，触发完毕还能执行一次
+    var throttle3 = function(func,delay){
+        var timer = null;
+        var pre = Date.now();
+        return function(){
+            var now = Date.now();
+
+            clearTimeout(timer);
+            if(now - pre >= delay){
+                func();
+                pre = Date.now();
+            }else{
+                // console.log('-----')   resize多少遍就会执行多少遍(减去通过前面那个分支打印出来的次数)
+                // 但是因为每一次触发 resize 时都会执行clearTimeout，所以不会说resize多少遍就执行多少遍setTimeout里的函数，只有当resize停止时，最后一个添加的 setTImeout 因为没有被清除掉所以得以执行
+                timer = setTimeout(func,delay);
+            }
+        }
+    }
+    // window.addEventListener('resize', throttle3(handler, 2000))
+
+
+    /*
+      防抖动：将几次操作合并为一次操作进行。原理是维护一个计时器，规定在delay时间后触发函数，但是在delay时间内再次触发的话，就会取消之前的计时器而重新设置。这样一来，只有最后一次操作能被触发
+    */
+    // 防抖动
+    // 将会包装事件的 debounce 函数
+    function debounce(fn, delay) {
+      // 维护一个 timer
+      let timer = null;
+
+      return function() {
+
+        clearTimeout(timer);
+        timer = setTimeout(fn, delay);
+      }
+    }
+    window.addEventListener('resize', debounce(handler, 2000))
+
+  </script>
+</body>
+</html>
