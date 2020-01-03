@@ -1,5 +1,6 @@
 const isFunction = variable => typeof variable === 'function'
 
+
 const PENDING = 'pending'
 const FULFILLED = 'fulfilled'
 const REJECTED = 'rejected'
